@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import logo from '../assets/logo.png';
 
 export default function RoomSetup() {
   const [topic, setTopic] = useState('');
@@ -117,7 +118,10 @@ export default function RoomSetup() {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4 text-center text-blue-600">Create New Room</h1>
+      <div className="flex flex-col items-center mb-4">
+        <img src={logo} alt="We Are Alike" className="w-24 mb-1" />
+        <h1 className="text-2xl font-bold text-center text-blue-600">Create New Room</h1>
+      </div>
       {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -172,8 +176,8 @@ export default function RoomSetup() {
           <div className="flex items-center justify-between mb-2">
             <label className="block text-sm font-medium text-gray-700">Items to Rate</label>
             <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${items.filter(i => i.trim() !== '').length >= 5
-                ? 'text-green-700 bg-green-100'
-                : 'text-red-600 bg-red-100'
+              ? 'text-green-700 bg-green-100'
+              : 'text-red-600 bg-red-100'
               }`}>
               {items.filter(i => i.trim() !== '').length} / 5 minimum
             </span>

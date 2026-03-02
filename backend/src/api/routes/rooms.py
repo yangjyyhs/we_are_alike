@@ -15,9 +15,11 @@ def create_room_endpoint(room: RoomCreate):
             items=room.items
         )
         return {"room_id": room_id}
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Error creating room: {e}")
-        raise HTTPException(status_code=400, detail="Failed to create room")
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/{room_id}", response_model=RoomDetail)
 def get_room_details(room_id: int):

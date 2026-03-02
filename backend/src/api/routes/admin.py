@@ -126,6 +126,8 @@ async def run_calculation_task(room_id: int):
     except Exception as e:
         print(f"Calculation task failed: {e}")
 
+MIN_PARTICIPANTS = 5
+
 @router.post("/calculate/{room_id}", status_code=202)
 def trigger_calculation(room_id: int, background_tasks: BackgroundTasks, current_room_id: int = Depends(get_current_room)):
     if room_id != current_room_id:
@@ -133,6 +135,14 @@ def trigger_calculation(room_id: int, background_tasks: BackgroundTasks, current
 
     if room_id in _calculated_rooms:
         raise HTTPException(status_code=409, detail="Results already sent for this room")
+
+    # Enforce minimum participant count
+    p_res = supabase.table("Participant_info").select("participant_id").eq("room_id", room_id).execute()
+    if len(p_res.data) < MIN_PARTICIPANTS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Need at least {MIN_PARTICIPANTS} participants to send results (current: {len(p_res.data)})"
+        )
 
     _calculated_rooms.add(room_id)
     background_tasks.add_task(run_calculation_task, room_id)
