@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import logo from '../assets/logo.png';
 
 export default function Home() {
   const [roomId, setRoomId] = useState('');
@@ -56,7 +55,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
-      <img src={logo} alt="We Are Alike" className="w-40 mb-2" />
       <h1 className="text-4xl font-bold text-blue-600 mb-8">We Are Alike</h1>
 
       <div className="w-full max-w-sm bg-white p-6 rounded-lg shadow-lg">

@@ -78,10 +78,8 @@ async def send_results_email(email: str, nickname: str, matches: list):
           <tr>
             <td style="background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 60%,#a855f7 100%);
                         border-radius:16px 16px 0 0; padding:40px 32px 32px; text-align:center;">
-              <img src="https://raw.githubusercontent.com/yangjyyhs/we_are_alike/001-interactive-rating-game/frontend/src/assets/logo.png"
-                   alt="We Are Alike"
-                   width="160"
-                   style="display:block; margin:0 auto 12px; width:160px; height:auto; border-radius:12px; background:#ffffff; padding:8px;" />
+              <div style="font-size:36px; margin-bottom:8px;">🎭</div>
+              <h1 style="margin:0; color:#ffffff; font-size:26px; font-weight:800; letter-spacing:-0.5px;">We Are Alike</h1>
               <p style="margin:8px 0 0; color:rgba(255,255,255,0.85); font-size:14px;">Your Similarity Results Are In!</p>
             </td>
           </tr>

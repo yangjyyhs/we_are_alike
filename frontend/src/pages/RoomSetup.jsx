@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import logo from '../assets/logo.png';
 
 export default function RoomSetup() {
   const [topic, setTopic] = useState('');
@@ -118,10 +117,7 @@ export default function RoomSetup() {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <div className="flex flex-col items-center mb-4">
-        <img src={logo} alt="We Are Alike" className="w-24 mb-1" />
-        <h1 className="text-2xl font-bold text-center text-blue-600">Create New Room</h1>
-      </div>
+      <h1 className="text-2xl font-bold mb-4 text-center text-blue-600">Create New Room</h1>
       {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
