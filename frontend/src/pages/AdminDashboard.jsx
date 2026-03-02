@@ -58,7 +58,8 @@ export default function AdminDashboard() {
         setSent(true);
       } else {
         console.error(err);
-        setError('Failed to trigger calculation. Please try again.');
+        const detail = err.response?.data?.detail || 'Failed to trigger calculation. Please try again.';
+        setError(detail);
       }
     } finally {
       setCalculating(false);
@@ -90,15 +91,15 @@ export default function AdminDashboard() {
       ) : (
         <button
           onClick={() => setShowConfirm(true)}
-          disabled={calculating || (stats?.participant_count || 0) < 2}
+          disabled={calculating || (stats?.participant_count || 0) < 5}
           className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 disabled:bg-gray-400 flex justify-center items-center"
         >
           {calculating ? 'Sending...' : 'Send Results to All'}
         </button>
       )}
 
-      {(stats?.participant_count || 0) < 2 && !sent && (
-        <p className="text-red-400 text-sm mt-2">Need at least 2 participants to calculate.</p>
+      {(stats?.participant_count || 0) < 5 && !sent && (
+        <p className="text-red-400 text-sm mt-2">Need at least 5 participants to send results ({stats?.participant_count || 0}/5).</p>
       )}
 
       {error && <p className="text-red-500 mt-4">{error}</p>}

@@ -112,6 +112,16 @@ async def run_calculation_task(room_id: int):
                 await send_results_email(p['email'], p['nick_name'], matches)
                 
         print(f"Calculation & Emails completed for room {room_id}")
+
+        # Cleanup: delete all room data (child tables first, then parent)
+        try:
+            supabase.table("Participant_answer").delete().eq("room_id", room_id).execute()
+            supabase.table("Participant_info").delete().eq("room_id", room_id).execute()
+            supabase.table("Room_items").delete().eq("room_id", room_id).execute()
+            supabase.table("Room_info").delete().eq("room_id", room_id).execute()
+            print(f"Room {room_id} data cleaned up from database.")
+        except Exception as cleanup_err:
+            print(f"Cleanup failed for room {room_id}: {cleanup_err}")
         
     except Exception as e:
         print(f"Calculation task failed: {e}")

@@ -36,8 +36,8 @@ export default function RoomSetup() {
       return;
     }
     const validItems = items.filter(i => i.trim() !== '');
-    if (validItems.length < 2) {
-      setError('Please add at least 2 items');
+    if (validItems.length < 5) {
+      setError('At least 5 items are required');
       return;
     }
 
@@ -169,7 +169,18 @@ export default function RoomSetup() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Items to Rate</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">Items to Rate</label>
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${items.filter(i => i.trim() !== '').length >= 5
+                ? 'text-green-700 bg-green-100'
+                : 'text-red-600 bg-red-100'
+              }`}>
+              {items.filter(i => i.trim() !== '').length} / 5 minimum
+            </span>
+          </div>
+          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-md px-3 py-1.5 mb-2">
+            ⚠️ Each room must have <strong>at least 5 items</strong> for participants to rate.
+          </p>
           {items.map((item, index) => (
             <div key={index} className="flex gap-2 mb-2">
               <input
@@ -201,8 +212,8 @@ export default function RoomSetup() {
 
         <button
           type="submit"
-          disabled={loading}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
+          disabled={loading || items.filter(i => i.trim() !== '').length < 5}
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           {loading ? 'Creating...' : 'Create Room'}
         </button>
