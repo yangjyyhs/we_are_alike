@@ -30,6 +30,7 @@ def create_new_room_logic(topic: str, password: str, include_non_see: bool, item
             # 3. Insert Room
             room_data = {
                 "room_id": room_id,
+                "topic": topic,
                 "room_password": hashed_pwd,
                 "include_non_see": include_non_see
             }

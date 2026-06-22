@@ -61,7 +61,7 @@ async def send_results_email(email: str, nickname: str, matches: list):
 
     match_cards = _build_match_cards(matches)
 
-    html = f"""<!DOCTYPE html>
+    html = f"""<!DOCTYPE html> /Users/jayson.yang79/Library/Metadata/CoreSpotlight/PasteboardHistory/2026-03-11_01-47-38.png
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>

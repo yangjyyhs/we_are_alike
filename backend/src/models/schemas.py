@@ -41,7 +41,7 @@ class ItemResponse(BaseModel):
     item_id: int
     item_name: str
     order_index: int
-    
+
 class RoomDetail(BaseModel):
     room_id: int
     include_non_see: bool
