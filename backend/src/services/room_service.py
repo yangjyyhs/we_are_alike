@@ -12,7 +12,7 @@ def cleanup_old_rooms():
         cutoff = (datetime.utcnow() - timedelta(days=7)).isoformat()
         # Supabase Python client syntax check: .delete().lt("created_at", cutoff).execute()
         # Need to ensure correct method chaining.
-        supabase.table("Room_info").delete().lt("created_at", cutoff).execute()
+        supabase.table("room_info").delete().lt("created_at", cutoff).execute()
     except Exception as e:
         print(f"Cleanup failed: {e}")
 
@@ -35,7 +35,7 @@ def create_new_room_logic(topic: str, password: str, include_non_see: bool, item
                 "include_non_see": include_non_see
             }
             # Execute insert
-            res = supabase.table("Room_info").insert(room_data).execute()
+            res = supabase.table("room_info").insert(room_data).execute()
             
             # If successful (no exception), insert items
             if items:
@@ -43,7 +43,7 @@ def create_new_room_logic(topic: str, password: str, include_non_see: bool, item
                     {"room_id": room_id, "item_name": item, "order_index": idx}
                     for idx, item in enumerate(items)
                 ]
-                supabase.table("Room_items").insert(items_data).execute()
+                supabase.table("room_items").insert(items_data).execute()
             
             return room_id
             

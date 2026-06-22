@@ -24,7 +24,7 @@ def create_room_endpoint(room: RoomCreate):
 @router.get("/{room_id}", response_model=RoomDetail)
 def get_room_details(room_id: int):
     try:
-        res = supabase.table("Room_info").select("room_id, include_non_see").eq("room_id", room_id).execute()
+        res = supabase.table("room_info").select("room_id, include_non_see").eq("room_id", room_id).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Room not found")
         return res.data[0]
@@ -36,7 +36,7 @@ def get_room_details(room_id: int):
 @router.get("/{room_id}/items", response_model=list[ItemResponse])
 def get_room_items(room_id: int):
     try:
-        res = supabase.table("Room_items").select("item_id, item_name, order_index").eq("room_id", room_id).order("order_index").execute()
+        res = supabase.table("room_items").select("item_id, item_name, order_index").eq("room_id", room_id).order("order_index").execute()
         return res.data
     except Exception as e:
         print(f"Error fetching items: {e}")

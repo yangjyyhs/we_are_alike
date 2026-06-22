@@ -4,11 +4,11 @@ from src.models.schemas import JoinRequest, AnswerSubmit
 def join_room_logic(room_id: int, data: JoinRequest) -> int:
     try:
         # Check room exists first to give better error than FK violation
-        room_check = supabase.table("Room_info").select("room_id").eq("room_id", room_id).execute()
+        room_check = supabase.table("room_info").select("room_id").eq("room_id", room_id).execute()
         if not room_check.data:
             raise ValueError("Room not found")
 
-        res = supabase.table("Participant_info").insert({
+        res = supabase.table("participant_info").insert({
             "room_id": room_id,
             "nick_name": data.nickname,
             "email": data.email
@@ -37,7 +37,7 @@ def submit_answers_logic(participant_id: int, room_id: int, data: AnswerSubmit):
         for a in data.answers
     ]
     try:
-        supabase.table("Participant_answer").insert(answers_data).execute()
+        supabase.table("participant_answer").insert(answers_data).execute()
     except Exception as e:
         print(f"Error submitting answers: {e}")
         raise e

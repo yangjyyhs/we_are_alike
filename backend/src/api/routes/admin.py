@@ -35,7 +35,7 @@ def get_current_room(authorization: str = Header(None)):
         room_id = int(room_id_str)
         
         # Verify against DB
-        res = supabase.table("Room_info").select("room_password").eq("room_id", room_id).execute()
+        res = supabase.table("room_info").select("room_password").eq("room_id", room_id).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Room not found")
         
@@ -50,7 +50,7 @@ def get_current_room(authorization: str = Header(None)):
 @router.post("/login", response_model=AdminLoginResponse)
 def admin_login(data: AdminLoginRequest):
     try:
-        res = supabase.table("Room_info").select("room_password").eq("room_id", data.room_id).execute()
+        res = supabase.table("room_info").select("room_password").eq("room_id", data.room_id).execute()
         if not res.data:
              raise HTTPException(status_code=404, detail="Room not found")
              
@@ -72,7 +72,7 @@ def get_stats(room_id: int, current_room_id: int = Depends(get_current_room)):
     if room_id != current_room_id:
         raise HTTPException(status_code=403, detail="Forbidden")
     try:
-        res = supabase.table("Participant_info").select("nick_name").eq("room_id", room_id).execute()
+        res = supabase.table("participant_info").select("nick_name").eq("room_id", room_id).execute()
         participants = [p["nick_name"] for p in res.data]
         return {
             "participant_count": len(participants),
@@ -86,15 +86,15 @@ async def run_calculation_task(room_id: int):
     print(f"Starting calculation for room {room_id}")
     try:
         # 1. Participants
-        p_res = supabase.table("Participant_info").select("*").eq("room_id", room_id).execute()
+        p_res = supabase.table("participant_info").select("*").eq("room_id", room_id).execute()
         participants = p_res.data
         
         # 2. Items
-        i_res = supabase.table("Room_items").select("*").eq("room_id", room_id).order("order_index").execute()
+        i_res = supabase.table("room_items").select("*").eq("room_id", room_id).order("order_index").execute()
         items = i_res.data
         
         # 3. Answers
-        a_res = supabase.table("Participant_answer").select("*").eq("room_id", room_id).execute()
+        a_res = supabase.table("participant_answer").select("*").eq("room_id", room_id).execute()
         answers = a_res.data
         
         if not participants:
@@ -115,10 +115,10 @@ async def run_calculation_task(room_id: int):
 
         # Cleanup: delete all room data (child tables first, then parent)
         try:
-            supabase.table("Participant_answer").delete().eq("room_id", room_id).execute()
-            supabase.table("Participant_info").delete().eq("room_id", room_id).execute()
-            supabase.table("Room_items").delete().eq("room_id", room_id).execute()
-            supabase.table("Room_info").delete().eq("room_id", room_id).execute()
+            supabase.table("participant_answer").delete().eq("room_id", room_id).execute()
+            supabase.table("participant_info").delete().eq("room_id", room_id).execute()
+            supabase.table("room_items").delete().eq("room_id", room_id).execute()
+            supabase.table("room_info").delete().eq("room_id", room_id).execute()
             print(f"Room {room_id} data cleaned up from database.")
         except Exception as cleanup_err:
             print(f"Cleanup failed for room {room_id}: {cleanup_err}")
@@ -137,7 +137,7 @@ def trigger_calculation(room_id: int, background_tasks: BackgroundTasks, current
         raise HTTPException(status_code=409, detail="Results already sent for this room")
 
     # Enforce minimum participant count
-    p_res = supabase.table("Participant_info").select("participant_id").eq("room_id", room_id).execute()
+    p_res = supabase.table("participant_info").select("participant_id").eq("room_id", room_id).execute()
     if len(p_res.data) < MIN_PARTICIPANTS:
         raise HTTPException(
             status_code=400,
